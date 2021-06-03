@@ -1,18 +1,28 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function(Controller) {
+	"sap/ui/core/mvc/Controller",
+	"sap/ui/model/json/JSONModel",
+	"mdZMD/model/EmployeeDetails"
+], function(Controller, JSONModel, EmployeeDetails) {
 	"use strict";
 
 	return Controller.extend("mdZMD.controller.master", {
-
+		EmployeeDetails: EmployeeDetails,
 		/**
 		 * Called when a controller is instantiated and its View controls (if available) are already created.
 		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 		 * @memberOf mdZMD.view.master
 		 */
-		//	onInit: function() {
-		//
-		//	},
+		onInit: function() {
+			var oEmpData = this.EmployeeDetails.EmpDetails();
+			var oViewModel = new JSONModel({});
+			oViewModel.setData(oEmpData);
+			this.getView().setModel(oViewModel, "oViewModel");
+		},
+		handleDelete: function(oEvent) {
+			var oList = oEvent.getSource(),
+				oItem = oEvent.getParameter("listItem");
+				oList.removeItem(oItem);
+		}
 
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered

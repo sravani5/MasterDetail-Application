@@ -2,11 +2,13 @@
 	xmlns:html="http://www.w3.org/1999/xhtml">
 	<!--<App>-->
 	<!--	<pages>-->
-			<Page title="Master Title">
-				<content>
-					<Text text="Hello Mastr Page"/>
-				</content>
-			</Page>
+	<Page title="Master">
+		<content>
+			<List headerText="Employees" items="{ path: 'oViewModel>/' }" mode="Delete" delete="handleDelete">
+				<StandardListItem title="{oViewModel>EmpName}" counter="{oViewModel>Salary}"/>
+			</List>
+		</content>
+	</Page>
 	<!--	</pages>-->
 	<!--</App>-->
 </mvc:View>
