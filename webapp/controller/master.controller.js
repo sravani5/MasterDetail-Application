@@ -17,11 +17,27 @@ sap.ui.define([
 			var oViewModel = new JSONModel({});
 			oViewModel.setData(oEmpData);
 			this.getView().setModel(oViewModel, "oViewModel");
+			// var oRouter = this.getOwnerComponent().getRouter();
 		},
 		handleDelete: function(oEvent) {
 			var oList = oEvent.getSource(),
 				oItem = oEvent.getParameter("listItem");
-				oList.removeItem(oItem);
+			oList.removeItem(oItem);
+		},
+		handleSelectChange: function(oEvent) {
+			var type = oEvent.getParameter("selectedItem").getKey();
+			this.byId("list").getItems().forEach(function(item) {
+				item.setType(type);
+			});
+		},
+		onNavListItemPress: function(oEvnt) {
+			var oList = oEvnt.getSource(),
+				oSelObj = oList.getBindingContext("oViewModel").getObject();
+			sap.ui.core.UIComponent.getRouterFor(this).navTo("detail", {
+				objectId: oSelObj.EmpId,
+				sPath: oList.getBindingContext("oViewModel").getPath().replace("/","")
+			});
+
 		}
 
 		/**

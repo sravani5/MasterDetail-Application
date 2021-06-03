@@ -1,9 +1,21 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="mdZMD.controller.Detail"
-	xmlns:html="http://www.w3.org/1999/xhtml">
+	xmlns:html="http://www.w3.org/1999/xhtml" 	
+	xmlns:form="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout">
 	<App>
 		<pages>
 			<Page title="Detail">
-				<content></content>
+				<content>
+					<form:SimpleForm id="emp" editable="true">
+						<Label text="Emp Name"/>
+						<Input value="{oEModel>EmpName}"/>
+						<Label text="Emp Id"/>
+						<Input value="{oEModel>EmpId}"/>
+						<Label text="designation"/>
+						<Input value="{oEModel>Designation}"/>
+						<Label text="Salary"/>
+					</form:SimpleForm>
+				</content>
 			</Page>
 		</pages>
 	</App>

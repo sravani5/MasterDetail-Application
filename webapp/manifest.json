@@ -93,7 +93,7 @@
 					"master"
 				]
 			}, {
-				"pattern": "RecordSummary/{objectId}",
+				"pattern": "RecordSummary/{objectId}/{sPath}",
 				"name": "detail",
 				"target": [
 					"master",
