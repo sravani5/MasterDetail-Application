@@ -3,8 +3,17 @@
 	<!--<App>-->
 	<!--	<pages>-->
 	<Page title="Master">
+		<subHeader>
+			<Bar id="headerBar">
+				<contentMiddle>
+					<SearchField id="searchField" width="100%"
+						search="onSearch"></SearchField>
+				</contentMiddle>
+			</Bar>
+		</subHeader>
 		<content>
-			<List id="list" headerText="Employees" mode="Delete" delete="handleDelete" items="{ path: 'oViewModel>/'}">
+			<List id="list" headerText="Employees" mode="Delete" delete="handleDelete" items="{ path: 'oViewModel>/'}"
+				updateFinished="onUpdateListFinished">
 				<headerToolbar>
 					<!--<OverflowToolbar>-->
 					<!--	<content>-->

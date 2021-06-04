@@ -1,8 +1,10 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
-	"mdZMD/model/EmployeeDetails"
-], function(Controller, JSONModel, EmployeeDetails) {
+	"mdZMD/model/EmployeeDetails",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator"
+], function(Controller, JSONModel, EmployeeDetails, Filter, FilterOperator) {
 	"use strict";
 
 	return Controller.extend("mdZMD.controller.master", {
@@ -17,6 +19,11 @@ sap.ui.define([
 			var oViewModel = new JSONModel({});
 			oViewModel.setData(oEmpData);
 			this.getView().setModel(oViewModel, "oViewModel");
+			this._oListFilterState = {
+					aFilter : [],
+					aSearch : []
+				};
+			sap.ui.core.UIComponent.getRouterFor(this).getRoute("master").attachPatternMatched(this._onMasterMatched, this);
 			// var oRouter = this.getOwnerComponent().getRouter();
 		},
 		handleDelete: function(oEvent) {
@@ -31,14 +38,47 @@ sap.ui.define([
 			});
 		},
 		onNavListItemPress: function(oEvnt) {
-			var oList = oEvnt.getSource(),
-				oSelObj = oList.getBindingContext("oViewModel").getObject();
+			// var oList = oEvnt.getSource(),
+			var oSelObj = oEvnt.getSource().getBindingContext("oViewModel").getObject();
 			sap.ui.core.UIComponent.getRouterFor(this).navTo("detail", {
 				objectId: oSelObj.EmpId,
-				sPath: oList.getBindingContext("oViewModel").getPath().replace("/","")
+				sPath: oEvnt.getSource().getBindingContext("oViewModel").getPath().replace("/", "")
 			});
 
+		},
+		onUpdateListFinished: function(oEvnt) {
+			var firstItem = this.getView().byId("list").getItems()[0],
+				oSelObj = firstItem.getBindingContext("oViewModel").getObject();
+			this.getView().byId("list").setSelectedItem(firstItem, true);
+			sap.ui.core.UIComponent.getRouterFor(this).navTo("detail", {
+				objectId: oSelObj.EmpId,
+				sPath: firstItem.getBindingContext("oViewModel").getPath().replace("/", "")
+			});
+			// this.onNavListItemPress(firstItem);
+		},
+		_onMasterMatched: function() {
+
+		},
+		onSearch: function(oEvent) {
+			var sQuery = oEvent.getParameter("query");
+			if (sQuery) {
+				this._oListFilterState.aSearch = [new Filter("EmpId", FilterOperator.Contains, sQuery)];
+			} else {
+				this._oListFilterState.aSearch = [];
+			}
+			this._applyFilterSearch();
+		},
+
+		_applyFilterSearch: function() {
+			var aFilters = this._oListFilterState.aSearch.concat(this._oListFilterState.aFilter);
+			this.getView().byId("list").getBinding("items").filter(aFilters, "Application");
 		}
+
+		// _applyFilterSearch : fuunction(oEvnt) {
+		// 	var aFilters = this._oListFilterState.aSearch.concat(this._oListFilterState.aFilter),
+		// 			oViewModel = this.getModel("masterView");
+		// 		this._oList.getBinding("items").filter(aFilters, "Application");
+		// }
 
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
